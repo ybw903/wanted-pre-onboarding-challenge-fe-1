@@ -5,8 +5,8 @@ import { useRedirectByInVadlidToken } from "../../hooks";
 import { Todo } from "../../types";
 
 const TodoPage: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>();
   const [visibleModal, setVisibleModal] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>();
   const [form, setForm] = useState({ title: "", content: "" });
   const { title, content } = form;
 
@@ -24,6 +24,16 @@ const TodoPage: React.FC = () => {
         return [...prev, todo];
       });
       setForm({ title: "", content: "" });
+    });
+  };
+
+  const handleClickEditButton = (id: string) => {};
+
+  const handleClickDeleteButton = (id: string) => {
+    todoAPI.deleteTodo(id).then((_) => {
+      const withoutDeletedTodos = todos?.filter((todo) => todo.id === id);
+      if (!withoutDeletedTodos) return;
+      setTodos(withoutDeletedTodos);
     });
   };
 
@@ -51,6 +61,12 @@ const TodoPage: React.FC = () => {
                   <span>{todo.title}</span>
                   <span>{todo.createdAt}</span>
                   <span>{todo.updatedAt}</span>
+                  <button onClick={() => handleClickEditButton(todo.id)}>
+                    수정
+                  </button>
+                  <button onClick={() => handleClickDeleteButton(todo.id)}>
+                    삭제
+                  </button>
                 </div>
               </li>
             ))}
