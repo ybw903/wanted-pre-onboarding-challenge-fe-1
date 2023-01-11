@@ -7,6 +7,7 @@ import { Todo } from "../../types";
 import TodoForm from "./TodoForm";
 
 import "./index.scss";
+import { formatter } from "../../utils";
 
 const TodoPage: React.FC = () => {
   const [editableTodo, setEditableTodo] = useState<Todo | null>(null);
@@ -14,6 +15,8 @@ const TodoPage: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>();
 
   useRedirectByInVadlidToken();
+
+  const { convertLocalDateTimeFormat } = formatter;
 
   const handleClickEditButton = (todo: Todo) => {
     setEditableTodo(todo);
@@ -58,9 +61,13 @@ const TodoPage: React.FC = () => {
                     <span className="subject">{"제목"}</span>
                     <span className="content">{todo.title}</span>
                     <span className="subject">{"작성일시"}</span>
-                    <span className="content">{todo.createdAt}</span>
+                    <span className="content">
+                      {convertLocalDateTimeFormat(todo.createdAt)}
+                    </span>
                     <span className="subject">{"수정일시"}</span>
-                    <span className="content">{todo.updatedAt}</span>
+                    <span className="content">
+                      {convertLocalDateTimeFormat(todo.updatedAt)}
+                    </span>
                   </div>
                   <div className="button-group">
                     <Button
