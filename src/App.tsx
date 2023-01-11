@@ -1,6 +1,3 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 import AuthPage from "./pages/Auth";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import TodoPage from "./pages/Todo";

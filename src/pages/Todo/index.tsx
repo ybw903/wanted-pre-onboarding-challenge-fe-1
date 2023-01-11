@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import todoAPI from "../../api/todoAPI";
+import { Button } from "../../components";
 
 import { useRedirectByInVadlidToken } from "../../hooks";
 import { Todo } from "../../types";
 import TodoForm from "./TodoForm";
+
+import "./index.scss";
 
 const TodoPage: React.FC = () => {
   const [editableTodo, setEditableTodo] = useState<Todo | null>(null);
@@ -39,23 +42,40 @@ const TodoPage: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <div>
-        <button onClick={handleClickOpenForm}>할 일 작성</button>
+    <div className="todo-root">
+      <div className="todo-list-root">
+        <header className="todo-list-header">
+          <h2>할 일 목록</h2>
+          <Button onClick={handleClickOpenForm}>할 일 작성</Button>
+        </header>
+
         {todos ? (
           <ul>
             {todos.map((todo) => (
               <li key={todo.id}>
-                <div>
-                  <span>{todo.title}</span>
-                  <span>{todo.createdAt}</span>
-                  <span>{todo.updatedAt}</span>
-                  <button onClick={() => handleClickEditButton(todo)}>
-                    수정
-                  </button>
-                  <button onClick={() => handleClickDeleteButton(todo.id)}>
-                    삭제
-                  </button>
+                <div className="todo-card-root">
+                  <div>
+                    <span className="subject">{"제목"}</span>
+                    <span className="content">{todo.title}</span>
+                    <span className="subject">{"작성일시"}</span>
+                    <span className="content">{todo.createdAt}</span>
+                    <span className="subject">{"수정일시"}</span>
+                    <span className="content">{todo.updatedAt}</span>
+                  </div>
+                  <div className="button-group">
+                    <Button
+                      onClick={() => handleClickEditButton(todo)}
+                      background={"inform"}
+                    >
+                      수정
+                    </Button>
+                    <Button
+                      onClick={() => handleClickDeleteButton(todo.id)}
+                      background={"danger"}
+                    >
+                      삭제
+                    </Button>
+                  </div>
                 </div>
               </li>
             ))}
