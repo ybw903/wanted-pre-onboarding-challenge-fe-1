@@ -18,12 +18,13 @@ const TodoPage: React.FC = () => {
   };
 
   const handleSubmitForm = () => {
-    todoAPI.createTodo(form).then((todo) =>
+    todoAPI.createTodo(form).then((todo) => {
       setTodos((prev) => {
         if (!prev) return;
         return [...prev, todo];
-      })
-    );
+      });
+      setForm({ title: "", content: "" });
+    });
   };
 
   const handleClickOpenModal = () => {
