@@ -1,33 +1,21 @@
 import React, { useEffect, useState } from "react";
 import todoAPI from "../../api/todoAPI";
-import { Modal } from "../../components";
+
 import { useRedirectByInVadlidToken } from "../../hooks";
 import { Todo } from "../../types";
+import TodoForm from "./TodoForm";
 
 const TodoPage: React.FC = () => {
-  const [visibleModal, setVisibleModal] = useState(false);
+  const [editableTodo, setEditableTodo] = useState<Todo | null>(null);
+  const [visibleForm, setVisibleForm] = useState(false);
   const [todos, setTodos] = useState<Todo[]>();
-  const [form, setForm] = useState({ title: "", content: "" });
-  const { title, content } = form;
 
   useRedirectByInVadlidToken();
 
-  const handleChangeForm = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = evt.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+  const handleClickEditButton = (todo: Todo) => {
+    setEditableTodo(todo);
+    setVisibleForm(true);
   };
-
-  const handleSubmitForm = () => {
-    todoAPI.createTodo(form).then((todo) => {
-      setTodos((prev) => {
-        if (!prev) return;
-        return [...prev, todo];
-      });
-      setForm({ title: "", content: "" });
-    });
-  };
-
-  const handleClickEditButton = (id: string) => {};
 
   const handleClickDeleteButton = (id: string) => {
     todoAPI.deleteTodo(id).then((_) => {
@@ -37,12 +25,13 @@ const TodoPage: React.FC = () => {
     });
   };
 
-  const handleClickOpenModal = () => {
-    setVisibleModal(true);
+  const handleClickOpenForm = () => {
+    setVisibleForm(true);
   };
 
-  const handleCloseModal = () => {
-    setVisibleModal(false);
+  const handleCloseForm = () => {
+    setVisibleForm(false);
+    if (editableTodo) setEditableTodo(null);
   };
 
   useEffect(() => {
@@ -52,7 +41,7 @@ const TodoPage: React.FC = () => {
   return (
     <div>
       <div>
-        <button onClick={handleClickOpenModal}>할 일 작성</button>
+        <button onClick={handleClickOpenForm}>할 일 작성</button>
         {todos ? (
           <ul>
             {todos.map((todo) => (
@@ -61,7 +50,7 @@ const TodoPage: React.FC = () => {
                   <span>{todo.title}</span>
                   <span>{todo.createdAt}</span>
                   <span>{todo.updatedAt}</span>
-                  <button onClick={() => handleClickEditButton(todo.id)}>
+                  <button onClick={() => handleClickEditButton(todo)}>
                     수정
                   </button>
                   <button onClick={() => handleClickDeleteButton(todo.id)}>
@@ -76,23 +65,13 @@ const TodoPage: React.FC = () => {
         )}
       </div>
       <div></div>
-      {visibleModal && (
-        <Modal visible={visibleModal} closeHandler={handleCloseModal}>
-          <input
-            type={"text"}
-            value={title}
-            name={"title"}
-            onChange={handleChangeForm}
-          />
-          <input
-            type={"text"}
-            value={content}
-            name={"content"}
-            onChange={handleChangeForm}
-          />
-          <button onClick={handleCloseModal}>닫기</button>
-          <button onClick={handleSubmitForm}>저장</button>
-        </Modal>
+      {visibleForm && (
+        <TodoForm
+          visible={visibleForm}
+          handleClose={handleCloseForm}
+          setTodos={setTodos}
+          editableTodo={editableTodo}
+        />
       )}
     </div>
   );
