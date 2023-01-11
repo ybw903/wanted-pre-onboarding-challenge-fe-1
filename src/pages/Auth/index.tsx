@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { validator } from "../../utils";
+import { authAPI } from "../../api";
+import { localStorageManager, validator } from "../../utils";
 
 const AuthPage: React.FC = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const { email, password } = form;
 
   const { validateEmail, validatePassword } = validator;
+  const { setToken } = localStorageManager;
 
   const validateForm = () => {
     return validateEmail(email) && validatePassword(password);
@@ -14,6 +16,13 @@ const AuthPage: React.FC = () => {
   const handleChangeForm = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = evt.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmitForm = () => {
+    authAPI.login(form).then((result) => {
+      const { token } = result;
+      setToken(token);
+    });
   };
 
   return (
@@ -30,7 +39,9 @@ const AuthPage: React.FC = () => {
         name={"password"}
         onChange={handleChangeForm}
       />
-      <button disabled={!validateForm()}>로그인</button>
+      <button disabled={!validateForm()} onClick={handleSubmitForm}>
+        로그인
+      </button>
     </div>
   );
 };
