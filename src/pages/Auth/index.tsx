@@ -1,22 +1,36 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { validator } from "../../utils";
 
 const AuthPage: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
+  const { email, password } = form;
+
+  const { validateEmail, validatePassword } = validator;
+
+  const validateForm = () => {
+    return validateEmail(email) && validatePassword(password);
+  };
+
+  const handleChangeForm = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = evt.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
   return (
     <div>
       <input
         type={"email"}
         value={email}
-        onChange={(evt) => setEmail(evt.target.value)}
+        name={"email"}
+        onChange={handleChangeForm}
       />
       <input
         type={"password"}
         value={password}
-        onChange={(evt) => setPassword(evt.target.value)}
+        name={"password"}
+        onChange={handleChangeForm}
       />
-      <button>로그인</button>
+      <button disabled={!validateForm()}>로그인</button>
     </div>
   );
 };
