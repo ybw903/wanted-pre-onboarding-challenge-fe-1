@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { authAPI } from "../../api";
 import { localStorageManager, validator } from "../../utils";
 
 const AuthPage: React.FC = () => {
   const [form, setForm] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
+
   const { email, password } = form;
 
   const { validateEmail, validatePassword } = validator;
@@ -22,6 +25,7 @@ const AuthPage: React.FC = () => {
     authAPI.login(form).then((result) => {
       const { token } = result;
       setToken(token);
+      navigate("/", { replace: true });
     });
   };
 
