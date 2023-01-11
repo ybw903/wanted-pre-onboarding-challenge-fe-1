@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authAPI } from "../../api";
+import { useRedirectByVadlidToken } from "../../hooks";
 import { localStorageManager, validator } from "../../utils";
 
 const AuthPage: React.FC = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+  useRedirectByVadlidToken();
 
   const { email, password } = form;
 
