@@ -1,0 +1,30 @@
+.todo-form-root {
+  min-height: 560px;
+  header {
+    height: 44px;
+    border-bottom: 2px solid #eee;
+    > h2 {
+      margin: 0 0;
+      padding-bottom: 8px;
+    }
+    display: flex;
+    align-items: center;
+  }
+  .form-body {
+    min-height: 440px;
+    padding: 20px;
+    .input-container-root {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-bottom: 18px;
+    }
+  }
+  .button-group-root {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    border-top: 2px solid #eee;
+  }
+}

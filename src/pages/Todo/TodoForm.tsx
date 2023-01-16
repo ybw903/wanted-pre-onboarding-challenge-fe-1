@@ -1,7 +1,10 @@
 import { useState } from "react";
 import todoAPI from "../../api/todoAPI";
-import { Modal } from "../../components";
+import { Button, Modal, TextArea } from "../../components";
+import Input from "../../components/Input";
 import { Todo } from "../../types";
+
+import "./TodoForm.scss";
 
 interface TodoFormProps {
   visible: boolean;
@@ -23,7 +26,9 @@ const TodoForm: React.FC<TodoFormProps> = ({
 
   const { title, content } = form;
 
-  const handleChangeForm = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeForm = (
+    evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = evt.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
@@ -59,20 +64,37 @@ const TodoForm: React.FC<TodoFormProps> = ({
 
   return (
     <Modal visible={visible} closeHandler={handleClose}>
-      <input
-        type={"text"}
-        value={title}
-        name={"title"}
-        onChange={handleChangeForm}
-      />
-      <input
-        type={"text"}
-        value={content}
-        name={"content"}
-        onChange={handleChangeForm}
-      />
-      <button onClick={handleClose}>닫기</button>
-      <button onClick={handleSubmit}>저장</button>
+      <div className="todo-form-root">
+        <header>
+          <h2>할 일 작성</h2>
+        </header>
+        <div className="form-body">
+          <div className="input-container-root">
+            <label htmlFor="title">제목</label>
+            <Input
+              type={"text"}
+              value={title}
+              name={"title"}
+              onChange={handleChangeForm}
+            />
+          </div>
+          <div className="input-container-root">
+            <label>내용</label>
+            <TextArea
+              value={content}
+              name={"content"}
+              onChange={handleChangeForm}
+              rows={20}
+            />
+          </div>
+        </div>
+        <div className="button-group-root">
+          <Button onClick={handleClose} background={"inform"}>
+            닫기
+          </Button>
+          <Button onClick={handleSubmit}>저장</Button>
+        </div>
+      </div>
     </Modal>
   );
 };
