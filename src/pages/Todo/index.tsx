@@ -10,6 +10,7 @@ import "./index.scss";
 import { formatter } from "../../utils";
 
 const TodoPage: React.FC = () => {
+  const [showenTodo, setShowenTodo] = useState<Todo | null>(null);
   const [editableTodo, setEditableTodo] = useState<Todo | null>(null);
   const [visibleForm, setVisibleForm] = useState(false);
   const [todos, setTodos] = useState<Todo[]>();
@@ -18,12 +19,28 @@ const TodoPage: React.FC = () => {
 
   const { convertLocalDateTimeFormat } = formatter;
 
-  const handleClickEditButton = (todo: Todo) => {
+  const handleClickTodoItem = (
+    evt: React.MouseEvent<HTMLLIElement, MouseEvent>,
+    todo: Todo
+  ) => {
+    evt.stopPropagation();
+    setShowenTodo(todo);
+  };
+
+  const handleClickEditButton = (
+    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    todo: Todo
+  ) => {
+    evt.stopPropagation();
     setEditableTodo(todo);
     setVisibleForm(true);
   };
 
-  const handleClickDeleteButton = (id: string) => {
+  const handleClickDeleteButton = (
+    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    id: string
+  ) => {
+    evt.stopPropagation();
     todoAPI.deleteTodo(id).then((_) => {
       const withoutDeletedTodos = todos?.filter((todo) => todo.id === id);
       if (!withoutDeletedTodos) return;
@@ -46,7 +63,10 @@ const TodoPage: React.FC = () => {
 
   return (
     <div className="todo-root">
-      <div className="todo-list-root">
+      <section
+        className={`todo-list-root ${showenTodo ? "open-detail" : ""}`}
+        onClick={() => setShowenTodo(null)}
+      >
         <header className="todo-list-header">
           <h2>할 일 목록</h2>
           <Button onClick={handleClickOpenForm}>할 일 작성</Button>
@@ -55,7 +75,10 @@ const TodoPage: React.FC = () => {
         {todos ? (
           <ul>
             {todos.map((todo) => (
-              <li key={todo.id}>
+              <li
+                key={todo.id}
+                onClick={(evt) => handleClickTodoItem(evt, todo)}
+              >
                 <div className="todo-card-root">
                   <div>
                     <span className="subject">{"제목"}</span>
@@ -71,13 +94,13 @@ const TodoPage: React.FC = () => {
                   </div>
                   <div className="button-group">
                     <Button
-                      onClick={() => handleClickEditButton(todo)}
+                      onClick={(evt) => handleClickEditButton(evt, todo)}
                       background={"inform"}
                     >
                       수정
                     </Button>
                     <Button
-                      onClick={() => handleClickDeleteButton(todo.id)}
+                      onClick={(evt) => handleClickDeleteButton(evt, todo.id)}
                       background={"danger"}
                     >
                       삭제
@@ -90,8 +113,27 @@ const TodoPage: React.FC = () => {
         ) : (
           <div></div>
         )}
-      </div>
-      <div></div>
+      </section>
+      {showenTodo && (
+        <section className="todo-detail-root">
+          <header>
+            <h2>{showenTodo.title}</h2>
+            <div>
+              <div>
+                <span className="subject">작성일</span>
+                <span>{convertLocalDateTimeFormat(showenTodo.createdAt)}</span>
+              </div>
+              <div>
+                <span className="subject">수정일</span>
+                <span>{convertLocalDateTimeFormat(showenTodo.updatedAt)}</span>
+              </div>
+            </div>
+          </header>
+
+          <div className="todo-detail-content-root">{showenTodo.content}</div>
+        </section>
+      )}
+
       {visibleForm && (
         <TodoForm
           visible={visibleForm}

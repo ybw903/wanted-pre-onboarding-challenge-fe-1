@@ -8,6 +8,11 @@
     flex-direction: column;
     width: 100%;
     align-items: center;
+    &.open-detail {
+      width: 60%;
+      border-right: 2px solid #eee;
+    }
+    transition: width 0.5s;
     .todo-list-header {
       display: flex;
       align-items: center;
@@ -47,5 +52,39 @@
         cursor: pointer;
       }
     }
+  }
+
+  .todo-detail-root {
+    width: 40%;
+    padding: 20px;
+
+    > header {
+      display: flex;
+      align-items: center;
+      > h2 {
+        width: 60%;
+      }
+      border-bottom: 2px solid #eee;
+    }
+    .subject {
+      font-weight: 700;
+
+      padding-right: 12px;
+    }
+    .todo-detail-content-root {
+      padding: 12px;
+    }
+    animation-name: showing;
+    animation-duration: 1.8s;
+    transition: width 0.5s;
+  }
+}
+
+@keyframes showing {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
   }
 }
