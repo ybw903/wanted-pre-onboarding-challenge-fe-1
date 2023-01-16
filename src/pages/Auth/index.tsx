@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authAPI } from "../../api";
+import { Button } from "../../components";
+import Input from "../../components/Input";
 import { useRedirectByVadlidToken } from "../../hooks";
 import { localStorageManager, validator } from "../../utils";
+
+import "./index.scss";
 
 const AuthPage: React.FC = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -32,22 +36,30 @@ const AuthPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <input
-        type={"email"}
-        value={email}
-        name={"email"}
-        onChange={handleChangeForm}
-      />
-      <input
-        type={"password"}
-        value={password}
-        name={"password"}
-        onChange={handleChangeForm}
-      />
-      <button disabled={!validateForm()} onClick={handleSubmitForm}>
-        로그인
-      </button>
+    <div className="auth-root">
+      <div className="auth-form">
+        <div className="form-input-container">
+          <h3 className="title">로그인</h3>
+          <Input
+            type={"email"}
+            value={email}
+            name={"email"}
+            onChange={handleChangeForm}
+            placeholder={"이메일"}
+          />
+          <Input
+            type={"password"}
+            value={password}
+            name={"password"}
+            onChange={handleChangeForm}
+            placeholder={"password"}
+          />
+        </div>
+
+        <Button disabled={!validateForm()} onClick={handleSubmitForm}>
+          로그인
+        </Button>
+      </div>
     </div>
   );
 };

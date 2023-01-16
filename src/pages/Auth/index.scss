@@ -1,0 +1,25 @@
+.auth-root {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .auth-form {
+    background: #eee;
+    display: flex;
+    padding: 28px;
+    border-radius: 12px;
+    flex-direction: column;
+
+    .title {
+      margin: 0.5em 0;
+    }
+
+    .form-input-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 40px;
+    }
+  }
+}
