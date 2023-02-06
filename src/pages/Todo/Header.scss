@@ -1,0 +1,16 @@
+.todo-header {
+  background: #080808;
+  height: 8vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .title {
+    color: #fff;
+    padding-left: 20px;
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .btn-group {
+    padding-right: 20px;
+  }
+}
