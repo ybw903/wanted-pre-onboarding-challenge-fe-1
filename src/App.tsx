@@ -7,6 +7,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<TodoPage />} />
+        <Route path="/:id" element={<TodoPage />} />
         <Route path="/auth" element={<AuthPage />} />
       </Routes>
     </BrowserRouter>

@@ -9,8 +9,12 @@ import TodoForm from "./TodoForm";
 import Header from "./Header";
 
 import "./index.scss";
+import { useNavigate, useParams } from "react-router-dom";
 
 const TodoPage: React.FC = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [showenTodo, setShowenTodo] = useState<Todo | null>(null);
   const [editableTodo, setEditableTodo] = useState<Todo | null>(null);
   const [visibleForm, setVisibleForm] = useState(false);
@@ -26,6 +30,7 @@ const TodoPage: React.FC = () => {
   ) => {
     evt.stopPropagation();
     setShowenTodo(todo);
+    navigate(`/${todo.id}`);
   };
 
   const handleClickEditButton = (
@@ -62,13 +67,29 @@ const TodoPage: React.FC = () => {
     todoAPI.getTodos().then((todos) => setTodos(todos));
   }, []);
 
+  useEffect(() => {
+    if (!todos) return;
+
+    if (!id) {
+      setShowenTodo(null);
+      return;
+    }
+
+    const detailTodo = todos.find((todo) => todo.id === id);
+    if (!detailTodo) return;
+
+    setShowenTodo(detailTodo);
+  }, [id, todos]);
+
   return (
     <main className="todo-root">
       <Header />
       <section className="todo-section-root">
         <section
           className={`todo-list-root ${showenTodo ? "open-detail" : ""}`}
-          onClick={() => setShowenTodo(null)}
+          onClick={() => {
+            navigate("/");
+          }}
         >
           <header className="todo-list-header">
             <h2>할 일 목록</h2>
